@@ -28,12 +28,13 @@ def bilateral_filter(input_img, kernel_size, sigma_s, sigma_r):
 
     ## Adding padding zero in the input image
     nrows, ncols =  input_img.shape
-    input_img =  np.concatenate((input_img, np.zeros([1, ncols])), axis=0)
-    input_img =  np.concatenate((np.zeros([1, ncols]), input_img), axis=0)
-    input_img =  np.concatenate((np.zeros([nrows+2, 1]), input_img), axis=1)
-    input_img =  np.concatenate(( input_img, np.zeros([nrows+2, 1])), axis=1)
-
     a = int((n-1)/2)
+    input_img =  np.concatenate((input_img, np.zeros([a, ncols])), axis=0)
+    input_img =  np.concatenate((np.zeros([a, ncols]), input_img), axis=0)
+    input_img =  np.concatenate((np.zeros([nrows+2*a, a]), input_img), axis=1)
+    input_img =  np.concatenate(( input_img, np.zeros([nrows+2*a, a])), axis=1)
+
+    
 
     ## Creating the output image as a zero matriz
     output_img = np.zeros(input_img.shape, dtype=np.uint8)
@@ -41,7 +42,7 @@ def bilateral_filter(input_img, kernel_size, sigma_s, sigma_r):
 
     for x in range (a, nrows-a):
         for y in range (a, ncols-a):
-            
+
             # for every pixel, the normalization factor (Wp)
             # and the the Intensity of the output pixel 
             # are initialized as 0
@@ -79,6 +80,10 @@ filename = str(input()).rstrip()
 method = int(input()) 
 save = int(input())
 
+# Para rodas na máquina
+#input_img = imageio.imread('../images/'+filename)
+
+# To submission
 input_img = imageio.imread(filename)
 
 if method == 1:
