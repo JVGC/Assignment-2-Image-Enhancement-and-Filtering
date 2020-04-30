@@ -95,10 +95,10 @@ method = int(input())
 save = int(input())
 
 # Para rodas na máquina
-input_img = imageio.imread('../images/'+filename)
+#input_img = imageio.imread('../images/'+filename)
 
 # To submission
-#input_img = imageio.imread(filename)
+input_img = imageio.imread(filename)
 
 if method == 1:
     n = int(input())
