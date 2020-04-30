@@ -34,7 +34,8 @@ def bilateral_filter(input_img, kernel_size, sigma_s, sigma_r):
     input_img =  np.concatenate((np.zeros([nrows+2*a, a]), input_img), axis=1)
     input_img =  np.concatenate(( input_img, np.zeros([nrows+2*a, a])), axis=1)
 
-    
+    ## Calculating the spatial component centered at the pixel (x,y)
+    spatial_gaussian = spatial_gaussian_component(n, sigma_s)
 
     ## Creating the output image as a zero matriz
     output_img = np.zeros(input_img.shape, dtype=np.uint8)
@@ -55,9 +56,6 @@ def bilateral_filter(input_img, kernel_size, sigma_s, sigma_r):
             ## Calculating the range gaussian for every neighboor of pixel (x,y)
             range_gaussian = gaussian_kernel(sub_img - input_img[x,y], sigma_r)
 
-            ## Calculating the spatial component centered at the pixel (x,y)
-            spatial_gaussian = spatial_gaussian_component(n, sigma_s)
-
 
             ## Final value of the filter
             w = np.multiply(range_gaussian, spatial_gaussian)
@@ -74,24 +72,43 @@ def bilateral_filter(input_img, kernel_size, sigma_s, sigma_r):
             output_img[x,y] =  If/Wp
     return input_img, output_img
 
+def scaling(image):
+    return ((image- np.min(image))*255/np.max(image))
 
+def kernel(sigma, n):
+    kernel =  np.zeros((1,n))
+    a = int((n-1)/2)
+    for x in range(n):
+        kernel[0,x] = gaussian_kernel(x-a, sigma)
+        
+    return kernel
+
+def vignette_filter(input_img, sigma_row, sigma_col):
+    Wrow = kernel(sigma_col, input_img.shape[1])
+    Wcol = kernel(sigma_row, input_img.shape[0])
+    W = np.transpose(Wcol) * Wrow
+    output_img = scaling(W *input_img)
+    return output_img
 
 filename = str(input()).rstrip() 
 method = int(input()) 
 save = int(input())
 
 # Para rodas na máquina
-#input_img = imageio.imread('../images/'+filename)
+input_img = imageio.imread('../images/'+filename)
 
 # To submission
-input_img = imageio.imread(filename)
+#input_img = imageio.imread(filename)
 
 if method == 1:
     n = int(input())
     sigma_s = float(input()) 
     sigma_r = float(input())
     input_img, output_img = bilateral_filter(input_img, n, sigma_s, sigma_r)
-
+if method == 3:
+    sigma_row = float(input()) # Caso5: 50
+    sigma_col = float(input()) # Caso5: 50
+    output_img = vignette_filter(input_img, sigma_row, sigma_col)
 #ERROR
 rse = np.sqrt(np.sum((input_img - output_img)**2))  
 
