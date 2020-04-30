@@ -84,8 +84,8 @@ def kernel(sigma, n):
     return kernel
 
 def vignette_filter(input_img, sigma_row, sigma_col):
-    Wrow = kernel(sigma_col, input_img.shape[1])
-    Wcol = kernel(sigma_row, input_img.shape[0])
+    Wrow = kernel(sigma_row, input_img.shape[1])
+    Wcol = kernel(sigma_col, input_img.shape[0])
     W = np.transpose(Wcol) * Wrow
     output_img = scaling(W *input_img)
     return output_img
@@ -95,10 +95,10 @@ method = int(input())
 save = int(input())
 
 # Para rodas na máquina
-#input_img = imageio.imread('../images/'+filename)
+input_img = imageio.imread('../images/'+filename)
 
 # To submission
-input_img = imageio.imread(filename)
+#input_img = imageio.imread(filename)
 
 if method == 1:
     n = int(input())
