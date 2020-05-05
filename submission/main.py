@@ -1,6 +1,7 @@
 ## Name: João Victor Garcia Coelho  NUSP:   10349540
 ##       Paulo André de Oliveira Carneiro   10295304
 ## Course Code: SCC0251 - 2020/1
+## Github: https://github.com/JVGC/Assignment-2-Image-Enhancement-and-Filtering
 
 
 ## Assignment 1 : Image Enhancement and Filtering
@@ -75,7 +76,7 @@ def bilateral_filter(input_img, kernel_size, sigma_s, sigma_r):
 
 
 def scaling(image):
-    return (image - np.min(image)) * 255 / np.max(image)
+    return (image - np.min(image)) * 255 / (np.max(image) - np.min(image))
 
 
 def kernel(sigma, n):
